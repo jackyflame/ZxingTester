@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -41,6 +43,7 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
     private Collection<BarcodeFormat> decodeFormats;
     private Map<DecodeHintType,?> decodeHints;
     private String characterSet;
+    private Result savedResultToShow;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -135,7 +138,7 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
             if (handler == null) {
                 handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
             }
-            //decodeOrStoreSavedBitmap(null, null);
+            decodeOrStoreSavedBitmap(null, null);
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
             displayFrameworkBugMessageAndExit();
@@ -171,7 +174,33 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
     }
 
     public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor){
+        boolean fromLiveScan = barcode != null;
+        //这里处理解码完成后的结果，此处将参数回传到Activity处理
+        if (fromLiveScan) {
+            beepManager.playBeepSoundAndVibrate();
+            Toast.makeText(this, "扫描成功", Toast.LENGTH_SHORT).show();
+            //Intent intent = getIntent();
+            //intent.putExtra("codedContent", rawResult.getText());
+            //intent.putExtra("codedBitmap", barcode);
+            //setResult(RESULT_OK, intent);
+            //finish();
+        }
+    }
 
+    private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
+        // Bitmap isn't used yet -- will be used soon
+        if (handler == null) {
+            savedResultToShow = result;
+        } else {
+            if (result != null) {
+                savedResultToShow = result;
+            }
+            if (savedResultToShow != null) {
+                Message message = Message.obtain(handler, R.id.decode_succeeded, savedResultToShow);
+                handler.sendMessage(message);
+            }
+            savedResultToShow = null;
+        }
     }
 
     public ViewfinderView getViewfinderView() {
