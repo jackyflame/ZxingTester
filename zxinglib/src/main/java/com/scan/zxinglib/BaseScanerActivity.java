@@ -23,6 +23,9 @@ import com.scan.zxinglib.camera.CameraManager;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 
 import static android.Manifest.permission.CAMERA;
@@ -41,7 +44,7 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
 
     private CaptureActivityHandler handler;
     private Collection<BarcodeFormat> decodeFormats;
-    private Map<DecodeHintType,?> decodeHints;
+    private Map<DecodeHintType,Object> decodeHints;
     private String characterSet;
     private Result savedResultToShow;
 
@@ -135,6 +138,12 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
             cameraManager.openDriver(surfaceHolder);
             // 创建一个handler来打开预览，并抛出一个运行时异常
             if (handler == null) {
+                decodeFormats = EnumSet.noneOf(BarcodeFormat.class);
+                //decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
+                decodeFormats.addAll(DecodeFormatManager.INDUSTRIAL_FORMATS);
+                decodeFormats.addAll(DecodeFormatManager.PRODUCT_FORMATS);
+                //decodeHints = new HashMap<>();
+                //decodeHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);//花更多的时间用于寻找图上的编码，优化准确性，但不优化速度，Boolean类型
                 handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
             }
             decodeOrStoreSavedBitmap(null, null);
@@ -177,7 +186,7 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
         //这里处理解码完成后的结果，此处将参数回传到Activity处理
         if (fromLiveScan) {
             beepManager.playBeepSoundAndVibrate();
-            Toast.makeText(this, "扫描成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "扫描成功:"+rawResult.getText(), Toast.LENGTH_SHORT).show();
             //Intent intent = getIntent();
             //intent.putExtra("codedContent", rawResult.getText());
             //intent.putExtra("codedBitmap", barcode);

@@ -24,6 +24,8 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.multi.qrcode.QRCodeMultiReader;
+import com.google.zxing.qrcode.QRCodeReader;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,10 +43,12 @@ final class DecodeHandler extends Handler {
   private final CaptureInterface activity;
   private final MultiFormatReader multiFormatReader;
   private boolean running = true;
+  private final Map<DecodeHintType,Object> hints;
 
   DecodeHandler(CaptureInterface activity, Map<DecodeHintType,Object> hints) {
     multiFormatReader = new MultiFormatReader();
     multiFormatReader.setHints(hints);
+    this.hints = hints;
     this.activity = activity;
   }
 
@@ -76,6 +80,9 @@ final class DecodeHandler extends Handler {
     if (source != null) {
       BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
       try {
+        //rawResult = new QRCodeReader().decode(bitmap,hints);
+        //rawResult = new QRCodeReader().decode(bitmap);
+        //rawResult = new QRCodeMultiReader().decode(bitmap);
         rawResult = multiFormatReader.decodeWithState(bitmap);
       } catch (ReaderException re) {
         // continue

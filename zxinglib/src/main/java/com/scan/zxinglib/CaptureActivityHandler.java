@@ -94,6 +94,9 @@ public final class CaptureActivityHandler extends Handler {
             }
             activity.handleDecode((Result) message.obj, barcode, scaleFactor);
 
+            //执行下一次扫描
+            cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+
         } else if (message.what == R.id.decode_failed) {// We're decoding as fast as possible, so when one decode fails, start another.
             state = State.PREVIEW;
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
