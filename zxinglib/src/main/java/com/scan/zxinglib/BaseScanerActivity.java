@@ -65,11 +65,7 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
     }
 
     private void initView(){
-        viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-        viewfinderView.setCameraManager(cameraManager);
-
         hasSurface = false;
-
         beepManager = new BeepManager(this);
     }
 
@@ -85,6 +81,9 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
         // 这是必须的，因为当我们第一次进入时需要显示帮助页，我们并不想打开Camera,测量屏幕大小
         // 当扫描框的尺寸不正确时会出现bug
         cameraManager = new CameraManager(getApplication());
+
+        viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+        viewfinderView.setCameraManager(cameraManager);
 
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -102,10 +101,10 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
 
     @Override
     protected void onPause() {
-        //if (handler != null) {
-        //    handler.quitSynchronously();
-        //    handler = null;
-        //}
+        if (handler != null) {
+            handler.quitSynchronously();
+            handler = null;
+        }
         //inactivityTimer.onPause();
         beepManager.close();
         cameraManager.closeDriver();
