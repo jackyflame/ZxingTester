@@ -1,4 +1,4 @@
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 /**
  * Created by admin on 2017/9/12.

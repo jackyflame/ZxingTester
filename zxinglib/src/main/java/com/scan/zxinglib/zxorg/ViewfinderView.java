@@ -1,4 +1,4 @@
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
+import com.scan.zxinglib.R;
 import com.scan.zxinglib.camera.CameraManager;
 
 import java.util.ArrayList;

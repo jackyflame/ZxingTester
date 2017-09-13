@@ -27,7 +27,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
-import com.scan.zxinglib.Preferences;
+import com.scan.zxinglib.zxorg.Preferences;
 import com.scan.zxinglib.camera.open.CameraFacing;
 import com.scan.zxinglib.camera.open.OpenCamera;
 

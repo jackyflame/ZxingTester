@@ -8,9 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.scan.zxinglib.ViewfinderView
+    <com.scan.zxinglib.zxorg.ViewfinderView
         android:id="@+id/viewfinder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/img_rst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

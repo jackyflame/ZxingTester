@@ -1,4 +1,4 @@
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 import android.content.Context;
 import android.content.Intent;

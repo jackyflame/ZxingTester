@@ -17,7 +17,7 @@
 package com.scan.zxinglib.camera;
 
 import android.content.SharedPreferences;
-import com.scan.zxinglib.Preferences;
+import com.scan.zxinglib.zxorg.Preferences;
 
 /**
  * Enumerates settings of the preference controlling the front light.

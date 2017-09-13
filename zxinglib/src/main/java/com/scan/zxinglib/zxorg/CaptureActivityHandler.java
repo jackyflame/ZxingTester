@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 import android.content.ActivityNotFoundException;
 import android.content.pm.PackageManager;
@@ -25,6 +25,7 @@ import android.provider.Browser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
+import com.scan.zxinglib.R;
 import com.scan.zxinglib.camera.CameraManager;
 
 import android.app.Activity;
@@ -98,6 +99,21 @@ public final class CaptureActivityHandler extends Handler {
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
 
         } else if (message.what == R.id.decode_failed) {// We're decoding as fast as possible, so when one decode fails, start another.
+            //展示扫描内容
+            Bundle bundle = message.getData();
+            Bitmap barcode = null;
+            float scaleFactor = 1.0f;
+            if (bundle != null) {
+                byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
+                if (compressedBitmap != null) {
+                    barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, null);
+                    // Mutable copy:
+                    barcode = barcode.copy(Bitmap.Config.ARGB_8888, true);
+                }
+                scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);
+                activity.handleDecode((Result) message.obj, barcode, scaleFactor);
+            }
+            //重新扫描
             state = State.PREVIEW;
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
 

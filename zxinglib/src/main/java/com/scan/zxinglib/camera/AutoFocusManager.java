@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.RejectedExecutionException;
 
-import com.scan.zxinglib.Preferences;
+import com.scan.zxinglib.zxorg.Preferences;
 
 @SuppressWarnings("deprecation") // camera APIs
 final class AutoFocusManager implements Camera.AutoFocusCallback {

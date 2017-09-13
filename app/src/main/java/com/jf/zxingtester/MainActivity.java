@@ -5,7 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.scan.zxinglib.BaseScanerActivity;
+import com.scan.zxinglib.customer.ScanBaseActivity;
+import com.scan.zxinglib.zxorg.BaseScanerActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +18,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, BaseScanerActivity.class));
+            }
+        });
+        findViewById(R.id.test2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ScanBaseActivity.class));
             }
         });
     }

@@ -7,4 +7,8 @@
     <string name="setting">设置</string>
     <string name="action_authority_error">应用权限不足，请前往系统设置开放权限</string>
     <string name="title_activity_errortips">警告</string>
+
+    <string name="unsupport_auto_focus">此设备不支持自动对焦</string>
+    <string name="toast_autofocus_failure">自动对焦失败</string>
+    <string name="unsupportflash">此设备不支持闪光灯</string>
 </resources>

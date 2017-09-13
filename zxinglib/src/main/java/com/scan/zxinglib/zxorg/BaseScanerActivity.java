@@ -1,4 +1,4 @@
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,18 +14,18 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
+import com.scan.zxinglib.R;
 import com.scan.zxinglib.camera.CameraManager;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
 import static android.Manifest.permission.CAMERA;
@@ -47,6 +47,8 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
     private Map<DecodeHintType,Object> decodeHints;
     private String characterSet;
     private Result savedResultToShow;
+
+    private ImageView img_rst;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -70,6 +72,7 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
     private void initView(){
         hasSurface = false;
         beepManager = new BeepManager(this);
+        img_rst = findViewById(R.id.img_rst);;
     }
 
     public boolean isCameraGranted() {
@@ -184,7 +187,7 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
     public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor){
         boolean fromLiveScan = barcode != null;
         //这里处理解码完成后的结果，此处将参数回传到Activity处理
-        if (fromLiveScan) {
+        if (fromLiveScan && rawResult != null) {
             beepManager.playBeepSoundAndVibrate();
             Toast.makeText(this, "扫描成功:"+rawResult.getText(), Toast.LENGTH_SHORT).show();
             //Intent intent = getIntent();
@@ -192,6 +195,10 @@ public class BaseScanerActivity extends AppCompatActivity implements SurfaceHold
             //intent.putExtra("codedBitmap", barcode);
             //setResult(RESULT_OK, intent);
             //finish();
+        }else{
+            if(barcode != null){
+                img_rst.setImageBitmap(barcode);
+            }
         }
     }
 

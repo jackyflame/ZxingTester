@@ -1,4 +1,4 @@
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.scan.zxinglib.R;
+
 import java.io.Closeable;
 import java.io.IOException;
 

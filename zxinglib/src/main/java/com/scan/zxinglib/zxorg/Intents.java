@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 import android.content.Intent;
 

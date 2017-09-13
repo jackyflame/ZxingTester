@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scan.zxinglib;
+package com.scan.zxinglib.zxorg;
 
 import android.graphics.Bitmap;
 import com.google.zxing.BinaryBitmap;
@@ -24,8 +24,7 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.multi.qrcode.QRCodeMultiReader;
-import com.google.zxing.qrcode.QRCodeReader;
+import com.scan.zxinglib.R;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -76,9 +75,10 @@ final class DecodeHandler extends Handler {
   private void decode(byte[] data, int width, int height) {
     long start = System.currentTimeMillis();
     Result rawResult = null;
+    BinaryBitmap bitmap = null;
     PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
     if (source != null) {
-      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+      bitmap = new BinaryBitmap(new HybridBinarizer(source));
       try {
         //rawResult = new QRCodeReader().decode(bitmap,hints);
         //rawResult = new QRCodeReader().decode(bitmap);
@@ -106,6 +106,9 @@ final class DecodeHandler extends Handler {
     } else {
       if (handler != null) {
         Message message = Message.obtain(handler, R.id.decode_failed);
+        Bundle bundle = new Bundle();
+        bundleThumbnail(source, bundle);
+        message.setData(bundle);
         message.sendToTarget();
       }
     }
