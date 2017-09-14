@@ -85,6 +85,7 @@ public class CGlobal {
             cropwidth = cropheight;
             cropheight = temp;
         }
+
         Bitmap bitmap = Bitmap.createBitmap(cropwidth, cropheight, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, cropwidth, 0, 0, cropwidth, cropheight);
 

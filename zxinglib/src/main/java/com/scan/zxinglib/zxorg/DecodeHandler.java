@@ -21,10 +21,12 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.scan.zxinglib.R;
+import com.scan.zxinglib.customer.CGlobal;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -75,10 +77,28 @@ final class DecodeHandler extends Handler {
   private void decode(byte[] data, int width, int height) {
     long start = System.currentTimeMillis();
     Result rawResult = null;
-    BinaryBitmap bitmap = null;
+
+//    Bitmap bitmapCorp =  CGlobal.makeCropedGrayBitmap(data, width, height, 90, activity.getCameraManager().getFramingRect());
+//    if (bitmapCorp != null) {
+//      int[] pixels = new int[bitmapCorp.getWidth() * bitmapCorp.getHeight()];
+//      bitmapCorp.getPixels(pixels, 0, bitmapCorp.getWidth(), 0, 0, bitmapCorp.getWidth(), bitmapCorp.getHeight());
+//      RGBLuminanceSource source = new RGBLuminanceSource(bitmapCorp.getWidth(), bitmapCorp.getHeight(), pixels);
+//      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+//      try {
+//        //rawResult = new QRCodeReader().decode(bitmap,hints);
+//        //rawResult = new QRCodeReader().decode(bitmap);
+//        //rawResult = new QRCodeMultiReader().decode(bitmap);
+//        rawResult = multiFormatReader.decodeWithState(bitmap);
+//      } catch (ReaderException re) {
+//        // continue
+//      } finally {
+//        multiFormatReader.reset();
+//      }
+//    }
+
     PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
     if (source != null) {
-      bitmap = new BinaryBitmap(new HybridBinarizer(source));
+      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
       try {
         //rawResult = new QRCodeReader().decode(bitmap,hints);
         //rawResult = new QRCodeReader().decode(bitmap);
@@ -99,7 +119,8 @@ final class DecodeHandler extends Handler {
       if (handler != null) {
         Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
         Bundle bundle = new Bundle();
-        bundleThumbnail(source, bundle);        
+        bundleThumbnail(source, bundle);
+//        bundleThumbnail(bitmapCorp, bundle);
         message.setData(bundle);
         message.sendToTarget();
       }
@@ -108,6 +129,7 @@ final class DecodeHandler extends Handler {
         Message message = Message.obtain(handler, R.id.decode_failed);
         Bundle bundle = new Bundle();
         bundleThumbnail(source, bundle);
+//        bundleThumbnail(bitmapCorp, bundle);
         message.setData(bundle);
         message.sendToTarget();
       }
@@ -125,4 +147,10 @@ final class DecodeHandler extends Handler {
     bundle.putFloat(DecodeThread.BARCODE_SCALED_FACTOR, (float) width / source.getWidth());
   }
 
+  private static void bundleThumbnail(Bitmap bitmap, Bundle bundle) {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+    bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
+    bundle.putFloat(DecodeThread.BARCODE_SCALED_FACTOR, (float) bitmap.getHeight() / bitmap.getWidth());
+  }
 }
