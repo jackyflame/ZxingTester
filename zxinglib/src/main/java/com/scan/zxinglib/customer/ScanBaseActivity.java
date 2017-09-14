@@ -277,8 +277,8 @@ public class ScanBaseActivity extends AppCompatActivity implements SurfaceHolder
             focustimeAuto = null;
         }
         if (camera != null) {
-            camera = CameraSetting.getInstance(this).closeCamera(camera);
             camera.setOneShotPreviewCallback(null);
+            camera = CameraSetting.getInstance(this).closeCamera(camera);
         }
     }
 
@@ -397,10 +397,10 @@ public class ScanBaseActivity extends AppCompatActivity implements SurfaceHolder
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            CloseCameraAndStopTimer();
             overridePendingTransition(
                     getResources().getIdentifier("zoom_enter", "anim", getApplication().getPackageName()),
                     getResources().getIdentifier("push_down_out", "anim", getApplication().getPackageName()));
+            CloseCameraAndStopTimer();
             this.finish();
             return true;
         }
@@ -422,6 +422,14 @@ public class ScanBaseActivity extends AppCompatActivity implements SurfaceHolder
     public void onPause() {
         super.onPause();
         CloseCameraAndStopTimer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(recogThread != null){
+            recogThread.stopScan();
+        }
+        super.onDestroy();
     }
 
     @Override

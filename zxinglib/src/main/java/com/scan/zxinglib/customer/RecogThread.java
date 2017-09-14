@@ -155,7 +155,10 @@ public class RecogThread extends Thread{
         BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
 
         Result  rawResult = null;
-
+        //检查是否停止识别
+        if (checkRecogStop()) {
+            return;
+        }
         if (binaryBitmap != null) {
             try {
                 if(multiFormatReader == null){
@@ -176,6 +179,10 @@ public class RecogThread extends Thread{
             } finally {
                 multiFormatReader.reset();
             }
+        }
+        //检查是否停止识别
+        if (checkRecogStop()) {
+            return;
         }
         if(recogTaskListener != null){
             String rstStr = "";
